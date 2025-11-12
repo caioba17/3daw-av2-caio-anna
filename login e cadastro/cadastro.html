@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Viação Calango</title>
+    <link rel="stylesheet" href="../css/cadastro.css">
+</head>
+<body>
+
+    <div class="area-cadastro">
+        <h2>Bem-Vindo à Viação Calango!</h2>
+        <form onsubmit="criarUsuario();">
+            <input type="text" id="nome" class="campo-input" placeholder="Nome Completo" required>
+            <input type="email" id="email" class="campo-input" placeholder="E-mail" required>       
+            <input type="password" id="senha" class="campo-input" placeholder="Senha" required>         
+            <input type="hidden" id="tipo" value="cliente">
+            <button type="submit" class="botao-submit">Cadastrar</button>
+        </form>
+
+        <a href="#" class="link-login">Já tenho cadastro</a>
+        
+        <p id="mensagem"></p>
+    </div>
+
+    <script>
+    function criarUsuario() {
+        let nome = document.getElementById("nome").value;
+        let email = document.getElementById("email").value;
+        let senha = document.getElementById("senha").value;
+        let tipo = document.getElementById("tipo").value;
+        let msg = document.getElementById("mensagem");
+
+        msg.innerHTML = "Cadastrando...";
+
+        let xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                msg.innerHTML = this.responseText;             
+                if (this.responseText.includes("sucesso")) {
+                     msg.style.color = "green";
+                     document.getElementById("nome").value = "";
+                     document.getElementById("email").value = "";
+                     document.getElementById("senha").value = "";
+                } else {
+                     msg.style.color = "red";
+                }
+            } else if (this.readyState == 4) {
+                msg.innerHTML = "Erro ao conectar: " + this.status;
+                msg.style.color = "red";
+            }
+        };
+        
+        xhttp.open("GET", "cadastro.php?nome=" + nome + "&email=" + email + "&senha=" + senha + "&tipo=" + tipo);
+        xhttp.send();
+    }
+    </script>
+</body>
+</html>
