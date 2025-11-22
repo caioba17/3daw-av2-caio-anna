@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Viação Calango</title>
+    <link rel="stylesheet" href="../css/login.css"> </head>
+<body>
+
+    <div class="area-cadastro">
+        <h2>Acesse sua Conta</h2>
+        <form>
+            <input type="email" id="email" class="campo-input" placeholder="E-mail" required>       
+            <input type="password" id="senha" class="campo-input" placeholder="Senha" required>         
+            <button type="submit" class="botao-submit" onclick="fazerLogin();">ENTRAR</button>
+        </form>
+
+        <a href="cadastro.html" class="link-login">Não tenho cadastro</a>
+        
+        <p id="mensagem"></p>
+    </div>
+
+    <script>
+    function fazerLogin() {
+        let email = document.getElementById("email").value;
+        let senha = document.getElementById("senha").value;
+        let msg = document.getElementById("mensagem");
+
+        msg.innerHTML = "Verificando...";
+        
+        let xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                
+                let resposta = this.responseText.trim();
+
+                if (resposta.includes("sucesso")) {
+                     msg.innerHTML = "Login realizado! Redirecionando...";
+                     msg.style.color = "green";
+                     
+                     let partes = resposta.split(":");
+                     let tipoUsuario = partes[1]; 
+
+                     setTimeout(function() { 
+                         if (tipoUsuario === 'FUNCIONARIO') {
+                             window.location.href = "../adm/painel.html"; 
+                         } else {
+                             window.location.href = "../index.html";
+                         }
+                     }, 1000);
+                     
+                } else {
+                     msg.innerHTML = resposta;
+                     msg.style.color = "red";
+                }
+            }
+        };
+        
+        xhttp.open("POST", "login.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("email=" + email + "&senha=" + senha);
+    }
+    </script>
+</body>
+</html>

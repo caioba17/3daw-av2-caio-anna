@@ -10,15 +10,15 @@
 
     <div class="area-cadastro">
         <h2>Bem-Vindo à Viação Calango!</h2>
-        <form onsubmit="criarUsuario();">
+        <form>
             <input type="text" id="nome" class="campo-input" placeholder="Nome Completo" required>
             <input type="email" id="email" class="campo-input" placeholder="E-mail" required>       
             <input type="password" id="senha" class="campo-input" placeholder="Senha" required>         
-            <input type="hidden" id="tipo" value="cliente">
-            <button type="submit" class="botao-submit">Cadastrar</button>
+            <input type="hidden" id="tipo" value="CLIENTE">
+            <button type="button" class="botao-submit" onclick="criarUsuario()">Cadastrar</button>
         </form>
 
-        <a href="#" class="link-login">Já tenho cadastro</a>
+        <a href="login.html" class="link-login">Já tenho cadastro</a>
         
         <p id="mensagem"></p>
     </div>
@@ -52,8 +52,9 @@
             }
         };
         
-        xhttp.open("GET", "cadastro.php?nome=" + nome + "&email=" + email + "&senha=" + senha + "&tipo=" + tipo);
-        xhttp.send();
+        xhttp.open("POST", "cadastro.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("nome=" + nome + "&email=" + email + "&senha=" + senha + "&tipo=" + tipo);
     }
     </script>
 </body>
