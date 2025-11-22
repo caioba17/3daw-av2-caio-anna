@@ -15,7 +15,7 @@
             <input type="email" id="email" class="campo-input" placeholder="E-mail" required>       
             <input type="password" id="senha" class="campo-input" placeholder="Senha" required>         
             <input type="hidden" id="tipo" value="CLIENTE">
-            <button type="button" class="botao-submit" onclick="criarUsuario()">Cadastrar</button>
+            <button type="button" class="botao-submit" onclick="event.preventDefault(); criarUsuario()">Cadastrar</button>
         </form>
 
         <a href="login.html" class="link-login">Já tenho cadastro</a>

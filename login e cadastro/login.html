@@ -12,7 +12,7 @@
         <form>
             <input type="email" id="email" class="campo-input" placeholder="E-mail" required>       
             <input type="password" id="senha" class="campo-input" placeholder="Senha" required>         
-            <button type="submit" class="botao-submit" onclick="fazerLogin();">ENTRAR</button>
+            <button type="submit" class="botao-submit" onclick="event.preventDefault(); fazerLogin();">ENTRAR</button>
         </form>
 
         <a href="cadastro.html" class="link-login">Não tenho cadastro</a>
