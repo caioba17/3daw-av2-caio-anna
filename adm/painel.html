@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Calango</title>
+    <link rel="stylesheet" href="../css/painel-adm.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        
+        <div class="painel-header">
+            <h2>Painel Administrativo</h2>
+            <nav>
+                <a href="../index.html" class="btn-voltar">Ir para o Site</a>
+                <a href="../logout.php" class="btn-voltar" style="color: #e74c3c; margin-left: 20px;">Sair</a>
+            </nav>
+        </div>
+
+        <div class="area-azul">
+            <div class="titulo-secao">
+                <span>Funcionalidades</span>
+            </div>
+
+            <div class="grid-menu">
+                <a href="onibus-listar.html" class="menu-card">
+                    <span>🚌</span>
+                    Gerenciar Frota
+                </a>
+                
+                <a href="motoristas-listar.html" class="menu-card">
+                    <span>👨‍✈️</span>
+                    Gerenciar Equipe
+                </a>
+                
+                <a href="viagens-listar.html" class="menu-card">
+                    <span>🗺️</span>
+                    Gerenciar Viagens
+                </a>
+                
+                <a href="venda-guiche.html" class="menu-card">
+                    <span>🎟️</span>
+                    Venda (Guichê)
+                </a>
+
+                <a href="relatorios.html" class="menu-card">
+                    <span>📊</span>
+                    Relatórios
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        window.onload = function() {
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let sessao = JSON.parse(this.responseText);
+                    if (sessao.status !== 'logado' || sessao.tipo !== 'FUNCIONARIO') {
+                        alert("Acesso negado!");
+                        window.location.href = "../index.html";
+                    }
+                }
+            };
+            xhttp.open("GET", "../api-verificar-sessao.php", true);
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
