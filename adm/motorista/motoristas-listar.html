@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Equipe</title>
+    <link rel="stylesheet" href="../../css/admin.css">
+    <link rel="stylesheet" href="../../css/onibus-listar.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        <div class="painel-header">
+            <h2>Motoristas</h2>
+            <nav>
+                <a href="../painel.html" class="btn-link">Voltar ao Painel</a>
+            </nav>
+        </div>
+
+        <div>
+            <a href="motoristas-criar.html" class="btn-novo">Novo Motorista</a>
+        </div>
+
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Matrícula</th>
+                        <th>Status Atual</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-motoristas">
+                    <tr><td colspan="4" style="text-align:center;">Carregando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+    function carregarMotoristas() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let html = "";
+
+                lista.forEach(motorista => {
+                    let statusMotorista = '<span class="badge badge-ok">DISPONÍVEL</span>';
+
+                    if (motorista.status === 'EM_VIAGEM') {
+                        statusMotorista = '<span class="badge" style="background:#e3f2fd; color:#2196f3;">EM VIAGEM</span>';
+                    }
+
+                    html += `
+                        <tr>
+                            <td style="font-weight: 700; color: #00607A;">${motorista.nome}</td>
+                            <td>${motorista.matricula}</td>
+                            <td>${statusMotorista}</td>
+                            <td>
+                                <a href="motoristas-alterar.html?id=${motorista.id}" class="btn-acao" style="text-decoration:none; background-color:#3498db; color:white;">Editar</a>
+                                <button class="btn-excluir-mini" onclick="excluirMotorista(${motorista.id})">Excluir</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('tabela-motoristas').innerHTML = html;
+            }
+        };
+        xhttp.open("GET", "motoristas-listar.php", true);
+        xhttp.send();
+    }
+
+    function excluirMotorista(id) {
+        if(confirm("Excluir este motorista?")) {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "motoristas-excluir.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("id=" + id);
+            xhttp.onload = function() {
+                carregarMotoristas();
+            }
+        }
+    }
+
+    window.onload = carregarMotoristas;
+    </script>
+</body>
+</html>

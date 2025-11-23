@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Motorista</title>
+    <link rel="stylesheet" href="../css/onibus-criar.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        <div class="painel-header">
+            <h2>Editar Motorista</h2>
+            <a href="motoristas-listar.html" class="btn-cancelar">Cancelar</a>
+        </div>
+
+        <form onsubmit="event.preventDefault(); salvarAlteracao();">
+            <input type="hidden" id="id_motorista">
+
+            <label>Nome Completo:</label>
+            <input type="text" id="nome" required>
+
+            <label>Matrícula:</label>
+            <input type="text" id="matricula" required>
+
+            <label>Status Atual:</label>
+            <select id="status">
+                <option value="DISPONIVEL">Disponível</option>
+                <option value="EM_VIAGEM">Em Viagem</option>
+            </select>
+
+            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+        </form>
+        <p id="msg"></p>
+    </div>
+
+    <script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        
+        if(id) {
+            carregarDados(id);
+        } else {
+            alert("ID inválido");
+            window.location.href = "motoristas-listar.html";
+        }
+    };
+
+    function carregarDados(id) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                let mot = JSON.parse(this.responseText);
+                
+                document.getElementById("id_motorista").value = mot.id;
+                document.getElementById("nome").value = mot.nome;
+                document.getElementById("matricula").value = mot.matricula;
+                document.getElementById("status").value = mot.status;
+            }
+        };
+        xhttp.open("GET", "motoristas-buscar.php?id=" + id, true);
+        xhttp.send();
+    }
+
+    function salvarAlteracao() {
+        let id = document.getElementById("id_motorista").value;
+        let nome = document.getElementById("nome").value;
+        let matricula = document.getElementById("matricula").value;
+        let status = document.getElementById("status").value;
+        let msg = document.getElementById("msg");
+
+        msg.innerHTML = "Salvando...";
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText.includes("sucesso")) {
+                    msg.innerHTML = "Alterado com sucesso!";
+                    msg.style.color = "green";
+                    setTimeout(() => { window.location.href = "motoristas-listar.html"; }, 1000);
+                } else {
+                    msg.innerHTML = "Erro: " + this.responseText;
+                    msg.style.color = "red";
+                }
+            }
+        };
+        
+        let dados = `id=${id}&nome=${nome}&matricula=${matricula}&status=${status}`;
+        
+        xhttp.open("POST", "motoristas-alterar.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(dados);
+    }
+    </script>
+</body>
+</html>
