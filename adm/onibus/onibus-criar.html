@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Ônibus - Calango</title>
+    <link rel="stylesheet" href="../../css/onibus-criar.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        
+        <div class="painel-header">
+            <h2>Novo Ônibus</h2>
+            <a href="onibus-listar.html" class="btn-cancelar">Cancelar</a>
+        </div>
+
+        <form>
+            
+            <label for="placa">Placa do Ônibus </label>
+            <input type="text" id="placa" placeholder="Ex: ABC-1234" maxlength="8" required>
+
+            <label for="modelo">Modelo</label>
+            <select id="modelo">
+                <option value="EXECUTIVO">Executivo (Padrão)</option>
+                <option value="SEMI-LEITO">Semi-Leito</option>
+                <option value="LEITO">Leito</option>
+            </select>
+
+            <label for="capacidade">Capacidade (Assentos)</label>
+            <input type="number" id="capacidade" placeholder="Ex: 42" required>
+
+            <label for="km">Quilometragem Atual</label>
+            <input type="number" id="km" value="0" required>
+            <small>*Utilizado para calcular a próxima revisão (10.000km).</small>
+
+            <button class="btn-salvar" onclick="event.preventDefault(); salvarOnibus();">Adicionar</button>
+        </form>
+        
+        <p id="msg"></p>
+    </div>
+
+    <script>
+    function salvarOnibus() {
+        let placa = document.getElementById("placa").value;
+        let modelo = document.getElementById("modelo").value;
+        let capacidade = document.getElementById("capacidade").value;
+        let km = document.getElementById("km").value;
+        let msg = document.getElementById("msg");
+
+        msg.innerHTML = "Salvando...";
+        msg.style.color = "#333";
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText.includes("sucesso")) {
+                    msg.innerHTML = "Ônibus cadastrado com sucesso!";
+                    msg.style.color = "green";
+                    
+                    document.getElementById("placa").value = "";
+                    document.getElementById("capacidade").value = "";
+                    document.getElementById("km").value = "0";
+
+                    setTimeout(() => { window.location.href = "onibus-listar.html"; }, 1000);
+                } else {
+                    msg.innerHTML = "Erro: " + this.responseText;
+                    msg.style.color = "red";
+                }
+            }
+        };
+        
+        xhttp.open("POST", "onibus-criar.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(`placa=${placa}&modelo=${modelo}&capacidade=${capacidade}&km=${km}`);
+    }
+    </script>
+</body>
+</html>

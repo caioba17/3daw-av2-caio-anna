@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Ônibus</title>
+    <link rel="stylesheet" href="../../css/onibus-listar.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        <div class="painel-header">
+            <h2>Editar Ônibus</h2>
+            <a href="onibus-listar.html" class="btn-cancelar">Cancelar</a>
+        </div>
+
+        <form onsubmit="event.preventDefault(); salvarAlteracao();">
+            <input type="hidden" id="id_onibus">
+
+            <label>Placa:</label>
+            <input type="text" id="placa" required>
+
+            <label>Modelo:</label>
+            <select id="modelo">
+                <option value="EXECUTIVO">Executivo</option>
+                <option value="SEMI-LEITO">Semi-Leito</option>
+                <option value="LEITO">Leito</option>
+            </select>
+
+            <label>Capacidade:</label>
+            <input type="number" id="capacidade" required>
+
+            <label>KM Rodados:</label>
+            <input type="number" id="km" required>
+
+            <button type="submit" class="btn-salvar">Salvar Alterações</button>
+        </form>
+        <p id="msg"></p>
+    </div>
+
+    <script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        
+        if(id) {
+            carregarDados(id);
+        } else {
+            alert("ID inválido");
+            window.location.href = "onibus-listar.html";
+        }
+    };
+
+    function carregarDados(id) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                let bus = JSON.parse(this.responseText);
+                
+                document.getElementById("id_onibus").value = bus.id;
+                document.getElementById("placa").value = bus.placa;
+                document.getElementById("modelo").value = bus.modelo;
+                document.getElementById("capacidade").value = bus.capacidade;
+                document.getElementById("km").value = bus.km_rodados;
+            }
+        };
+        xhttp.open("GET", "onibus-buscar.php?id=" + id, true);
+        xhttp.send();
+    }
+
+    function salvarAlteracao() {
+        let id = document.getElementById("id_onibus").value;
+        let placa = document.getElementById("placa").value;
+        let modelo = document.getElementById("modelo").value;
+        let cap = document.getElementById("capacidade").value;
+        let km = document.getElementById("km").value;
+        let msg = document.getElementById("msg");
+
+        msg.innerHTML = "Salvando...";
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText.includes("sucesso")) {
+                    msg.innerHTML = "Alterado com sucesso!";
+                    msg.style.color = "green";
+                    setTimeout(() => { window.location.href = "onibus-listar.html"; }, 1000);
+                } else {
+                    msg.innerHTML = "Erro: " + this.responseText;
+                    msg.style.color = "red";
+                }
+            }
+        };
+        
+        let dados = `id=${id}&placa=${placa}&modelo=${modelo}&capacidade=${cap}&km=${km}`;
+        xhttp.open("POST", "onibus-alterar.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(dados);
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Frota - Calango</title>
+    <link rel="stylesheet" href="../../css/onibus-listar.css">
+</head>
+<body>
+
+    <div class="painel-container">
+        
+        <div class="painel-header">
+            <h2>Frota de Ônibus</h2>
+            <nav>
+                <a href="../painel.html" class="btn-link">Voltar ao Painel</a>
+            </nav>
+        </div>
+
+        <div>
+            <a href="onibus-criar.html" class="btn-novo">Novo Ônibus</a>
+        </div>
+
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Placa</th>
+                        <th>Modelo</th>
+                        <th>Lugares</th>
+                        <th>Quilometragem</th>
+                        <th>Status (Revisão)</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-onibus">
+                    <tr><td colspan="6" style="text-align:center;">Carregando frota...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+    function carregarOnibus() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let html = "";
+
+                if (lista.length === 0) {
+                    html = "<tr><td colspan='6' style='text-align:center; padding: 30px;'>Nenhum ônibus cadastrado.</td></tr>";
+                } else {
+                    lista.forEach(onibus => {
+                        let statusHTML = '<span class="badge badge-ok">Ok</span>';
+                        let km = parseInt(onibus.km_rodados);
+                        
+                        if (km >= 10000) {
+                            statusHTML = '<span class="badge badge-danger">REVISÃO</span>';
+                        }
+
+                        html += `
+                            <tr>
+                                <td>${onibus.placa}</td>
+                                <td>${onibus.modelo}</td>
+                                <td>${onibus.capacidade} Assentos</td>
+                                <td>${km} km</td>
+                                <td>${statusHTML}</td>
+                                <td class="acoes">
+                                    <a href="onibus-alterar.html?id=${onibus.id}" class="btn-editar" style="text-decoration:none; background-color:#3498db; color:white;">Editar</a>
+                                    <button class="btn-excluir-mini" onclick="excluirOnibus(${onibus.id})">Excluir</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+                document.getElementById('tabela-onibus').innerHTML = html;
+            }
+        };
+        xhttp.open("GET", "onibus-listar.php", true);
+        xhttp.send();
+    }
+
+    function excluirOnibus(id) {
+        if(confirm("Excluir?")) {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "onibus-excluir.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("id=" + id);
+            xhttp.onload = function() {
+                if (this.responseText.includes("Excluído")) {
+                    carregarOnibus();
+                } else {
+                    alert("Erro: " + this.responseText);
+                }
+            }
+        }
+    }
+
+    window.onload = carregarOnibus;
+    </script>
+</body>
+</html>
