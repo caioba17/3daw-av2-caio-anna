@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Venda - Guichê</title>
+    <link rel="stylesheet" href="../css/vendas.css">
+</head>
+<body>
+
+    <div class="painel-container" style="max-width: 900px;">
+        
+        <div class="painel-header">
+            <h2>Venda de Passagem (Guichê)</h2>
+            <nav>
+                <a href="painel.html" class="btn-link">Voltar</a>
+            </nav>
+        </div>
+
+        <div class="filtros-busca">
+            <input type="text" id="origem" placeholder="Origem">
+            <input type="text" id="destino" placeholder="Destino">
+            <input type="date" id="data">
+            <button class="btn-buscar" onclick="buscarViagens()">Buscar Viagem</button>
+        </div>
+
+        <div id="resultados">
+            <p style="text-align:center; color:#777;">Utilize os filtros para encontrar uma viagem.</p>
+        </div>
+
+    </div>
+
+    <script>
+    function buscarViagens() {
+        let origem = document.getElementById("origem").value;
+        let destino = document.getElementById("destino").value;
+        let data = document.getElementById("data").value;
+        let container = document.getElementById("resultados");
+
+        container.innerHTML = "<p style='text-align:center'>Buscando...</p>";
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let html = "";
+
+                if (lista.length === 0) {
+                    html = "<p style='text-align:center'>Nenhuma viagem encontrada.</p>";
+                } else {
+                    lista.forEach(v => {
+                        let dataF = v.data_ida.split('-').reverse().join('/');
+                        html += `
+                            <div class="item-viagem">
+                                <div>
+                                    <h3>${v.origem} ➝ ${v.destino}</h3>
+                                    <span>${dataF} | ${v.hora_saida}</span><br>
+                                    <small>${v.tipo_onibus}</small>
+                                </div>
+                                <div style="text-align:right">
+                                    <h3 style="color:#27ae60">R$ ${v.preco}</h3>
+                                    <button class="btn-vender" onclick="realizarVenda(${v.id})">VENDER</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                container.innerHTML = html;
+            }
+        };
+        xhttp.open("GET", `../inicio/viagens-buscar.php?origem=${origem}&destino=${destino}&data=${data}`, true);
+        xhttp.send();
+    }
+
+    function realizarVenda(idViagem) {
+        if(!confirm("Confirmar venda em DINHEIRO para esta viagem?")) return;
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "venda-guiche.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        
+        xhttp.onload = function() {
+            alert(this.responseText);
+        };
+        xhttp.send(`id_viagem=${idViagem}`);
+    }
+    </script>
+</body>
+</html>

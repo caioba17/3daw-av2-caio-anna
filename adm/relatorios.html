@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatórios Gerenciais</title>
+    <link rel="stylesheet" href="../css/relatorio.css">
+
+</head>
+<body>
+    <div class="painel-container" style="max-width: 1200px;">    
+        <div class="painel-header">
+            <h2>Relatórios Operacionais</h2>
+            <nav>
+                <a href="painel.html" class="btn-link">Voltar ao Painel</a>
+            </nav>
+        </div>
+
+        <div class="dashboard-grid">
+            
+            <div class="card-relatorio">
+                <h3>Ônibus em Alerta (Revisão)</h3>
+                <div id="lista-revisao">
+                    <p style="text-align:center">Carregando...</p>
+                </div>
+            </div>
+
+            <div class="card-relatorio">
+                <h3>Disponibilidade da Equipe</h3>
+                <div style="display: flex; justify-content: space-around;">
+                    <div>
+                        <div id="num-disponivel" class="resumo-numero">0</div>
+                        <div class="resumo-label">Disponíveis</div>
+                    </div>
+                    <div>
+                        <div id="num-viagem" class="resumo-numero" style="color: #e67e22;">0</div>
+                        <div class="resumo-label">Em Viagem</div>
+                    </div>
+                </div>
+                <br>
+                <h4>Quem está viajando agora?</h4>
+                <div id="lista-viajando"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+    window.onload = function() {
+        carregarRelatorioOnibus();
+        carregarRelatorioMotoristas();
+    };
+
+    function carregarRelatorioOnibus() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let html = "";
+                let count = 0;
+
+                lista.forEach(bus => {
+                    if (parseInt(bus.km_rodados) >= 10000) {
+                        count++;
+                    html += `
+                        <div class="item-alerta">
+                            <div>
+                                <strong>${bus.placa}</strong> (${bus.modelo})
+                                <br><small>${bus.km_rodados} km rodados</small>
+                            </div>
+                            <div style="text-align:right">
+                                <span class="tag-vermelha">Revisão Urgente</span>
+                                <br>
+                                <button style="margin-top:7px; cursor:pointer; background:#2ecc71; color:white; border:none; padding:5px 20px; border-radius:4px; font-weight:bold;" 
+                                    onclick="realizarRevisao(${bus.id})">
+                                    Revisar Agora   
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    }
+                });
+
+                if (count === 0) {
+                    html = "<p style='text-align:center; color:green; padding:20px;'>✅ Toda a frota está em dia!</p>";
+                }
+                document.getElementById('lista-revisao').innerHTML = html;
+            }
+        };
+        xhttp.open("GET", "onibus/onibus-listar.php", true);
+        xhttp.send();
+    }
+
+    function carregarRelatorioMotoristas() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            if (this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let disponiveis = 0;
+                let viajando = 0;
+                let htmlViajando = "";
+
+                lista.forEach(mot => {
+                    if (mot.status === 'DISPONIVEL') {
+                        disponiveis++;
+                    } else if (mot.status === 'EM_VIAGEM') {
+                        viajando++;
+                        htmlViajando += `
+                            <div class="item-alerta">
+                                <strong>${mot.nome}</strong>
+                                <span class="tag-azul">Em Rota</span>
+                            </div>
+                        `;
+                    }
+                });
+
+                document.getElementById('num-disponivel').innerText = disponiveis;
+                document.getElementById('num-viagem').innerText = viajando;
+                
+                if (viajando === 0) htmlViajando = "<p style='text-align:center; color:#888;'>Nenhum motorista em viagem no momento.</p>";
+                document.getElementById('lista-viajando').innerHTML = htmlViajando;
+            }
+        };
+        xhttp.open("GET", "motorista/motoristas-listar.php", true);
+        xhttp.send();
+    }
+
+    function realizarRevisao(id) {
+    if(!confirm("Confirmar revisão?")) return;
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "revisar-onibus.php", true); 
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("id=" + id);
+    
+    xhttp.onload = function() {
+        alert(this.responseText);
+        carregarRelatorioOnibus();
+    }
+}
+    </script>
+</body>
+</html>
