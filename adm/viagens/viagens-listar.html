@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Viagens</title>
+    <link rel="stylesheet" href="../../css/painel-adm.css">
+    <link rel="stylesheet" href="../../css/onibus-listar.css">
+</head>
+<body>
+
+    <div class="painel-container" style="max-width: 1200px;">
+        
+        <div class="painel-header">
+            <h2>Viagens</h2>
+            <nav>
+                <a href="../painel.html" class="btn-link">Voltar ao Painel</a>
+            </nav>
+        </div>
+
+        <div>
+            <a href="viagens-criar.html" class="btn-novo">Nova Viagem</a>
+        </div>
+
+        <div class="tabela">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data / Hora</th>
+                        <th>Origem ➝ Destino</th>
+                        <th>Ônibus</th>
+                        <th>Motorista</th>
+                        <th>Preço</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-viagens">
+                    <tr><td colspan="6" style="text-align:center;">Carregando viagens...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+    function carregarViagens() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                let lista = JSON.parse(this.responseText);
+                let html = "";
+
+                if (lista.length === 0) {
+                    html = "<tr><td colspan='6' style='text-align:center; padding: 30px; color: #888;'>Nenhuma viagem agendada.</td></tr>";
+                } else {
+                    lista.forEach(viagem => {
+                        let dataFormatada = new Date(viagem.data_ida).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                        
+                        let motoristaNome = viagem.nome_motorista ? viagem.nome_motorista : '<span style="color:red">Excluído</span>';
+                        let onibusPlaca = viagem.placa_onibus ? viagem.placa_onibus : '<span style="color:red">Excluído</span>';
+                        
+                        html += `
+                            <tr>
+                                <td>
+                                    <strong>${dataFormatada}</strong><br>
+                                    <small>${viagem.hora_saida}</small>
+                                </td>
+                                <td>
+                                    ${viagem.origem} <br> ➝ <strong>${viagem.destino}</strong>
+                                </td>
+                                <td>${onibusPlaca}<br><small>${viagem.tipo_onibus}</small></td>
+                                <td>${motoristaNome}</td>
+                                <td style="color: #27ae60; font-weight:bold;">R$ ${viagem.preco}</td>
+                                <td>
+                                    <button class="btn-excluir-mini" onclick="excluirViagem(${viagem.id})">Cancelar</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+                document.getElementById('tabela-viagens').innerHTML = html;
+            }
+        };
+        xhttp.open("GET", "viagens-listar.php", true);
+        xhttp.send();
+    }
+
+    function excluirViagem(id) {
+        if(confirm("Excluir?")) {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "viagens-excluir.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("id=" + id);
+            xhttp.onload = function() {
+                carregarViagens();
+            }
+        }
+    }
+
+    window.onload = carregarViagens;
+    </script>
+</body>
+</html>
