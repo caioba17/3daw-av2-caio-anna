@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viação Calango - Home</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">Viação Calango</div>
+            <nav>
+                <a href="#">Início</a>
+                <a href="viagens-pesquisa.html">Viagens</a> <span id="area-auth">
+                    <span id="login-area">
+                        <a href="../login_cadastro/login.html">Entrar</a>
+                    </span>
+                    
+                    <span id="user-area" style="display: none;">
+                        <span id="msg-ola" class="ola-text"></span>
+                        <a href="#" id="link-admin" style="display: none;">Painel</a>
+                        <a href="logout.php" class="btn-sair">Sair</a>
+                    </span>
+                </span>
+                
+                <a href="passagens-listar.html">Minhas Passagens</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-text">
+                <h1>VIAÇÃO CALANGO!</h1>
+                <p>VIAGENS BARATAS E SEGURAS!<br>Facilidade na reserva, seguro e preço acessível.</p>
+            </div>
+
+            <div class="busca-box">
+                <div class="campo">
+                    <label>Saindo de</label>
+                    <input type="text" id="busca-origem" placeholder="Ex: Rio de Janeiro">
+                </div>
+                <div class="campo">
+                    <label>Indo para</label>
+                    <input type="text" id="busca-destino" placeholder="Ex: São Paulo">
+                </div>
+                <div class="campo">
+                    <label>Data de Ida</label>
+                    <input type="date" id="busca-data">
+                </div>
+                <div class="campo">
+                    <label>Data de Volta</label>
+                    <input type="date" disabled title="Ainda não implementado">
+                </div>
+                <button class="btn-pesquisar" onclick="irParaBusca()">PESQUISAR</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="destinos container">
+        <h2>Destinos mais procurados</h2>
+        <div class="grid-destinos">
+            <div class="card">
+                <div class="card-img" style="background-image: url('../img/sp2.png');"></div>
+                <div class="card-info">
+                    <h3>São Paulo</h3>
+                    <p>A partir de <strong>R$ 49,99</strong></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background-image: url('../img/rj.png');"></div>
+                <div class="card-info">
+                    <h3>Rio de Janeiro</h3>
+                    <p>A partir de <strong>R$ 47,90</strong></p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background-image: url('../img/salvador.png');"></div>
+                <div class="card-info">
+                    <h3>Salvador</h3>
+                    <p>A partir de <strong>R$ 65,90</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ofertas container">
+        <div class="grid-ofertas">
+            <div class="card-oferta">
+                <h3>Ônibus para<br>Vitória</h3>
+                <div class="oferta-img" style="background-image: url('../img/vitoria.png');"></div>
+                <div class="oferta-conteudo">
+                    <div class="oferta-header"><span>Saindo de</span><span>A partir de</span></div>
+                    <div class="oferta-row"><span>Rio de Janeiro</span><span class="preco">R$ 84,99</span></div>
+                    <div class="oferta-row"><span>São Paulo</span><span class="preco">R$ 74,99</span></div>
+                    <a href="#" class="link-ver-todos">Ver todos</a>
+                </div>
+            </div>
+            <div class="card-oferta">
+                <h3>Ônibus para<br>Brasília</h3>
+                <div class="oferta-img" style="background-image: url('../img/br.png');"></div>
+                <div class="oferta-conteudo">
+                    <div class="oferta-header"><span>Saindo de</span><span>A partir de</span></div>
+                    <div class="oferta-row"><span>Juiz de Fora</span><span class="preco">R$ 64,99</span></div>
+                    <div class="oferta-row"><span>Goiânia</span><span class="preco">R$ 34,99</span></div>
+                    <a href="#" class="link-ver-todos">Ver todos</a>
+                </div>
+            </div>
+            <div class="card-oferta">
+                <h3>Ônibus para<br>Belo Horizonte</h3>
+                <div class="oferta-img" style="background-image: url('../img/bh.png');"></div>
+                <div class="oferta-conteudo">
+                    <div class="oferta-header"><span>Saindo de</span><span>A partir de</span></div>
+                    <div class="oferta-row"><span>São Paulo</span><span class="preco">R$ 54,99</span></div>
+                    <div class="oferta-row"><span>Vitória</span><span class="preco">R$ 49,99</span></div>
+                    <a href="#" class="link-ver-todos">Ver todos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="vantagens container">
+        <h2>Por que viajar com a Viação Calango?</h2>
+        <div class="grid-vantagens">
+            <div class="card-vantagem">
+                <h3>Muita qualidade</h3>
+                <p>Ônibus com extremo conforto e qualidade. Leito, semileito e executivo.</p>
+            </div>
+            <div class="card-vantagem">
+                <h3>Preços acessíveis</h3>
+                <p>Viagens de ônibus com preços extremamente acessíveis e promoções.</p>
+            </div>
+            <div class="card-vantagem">
+                <h3>Muita segurança</h3>
+                <p>Garantimos ônibus e motoristas extremamente confiáveis.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Viação Calango - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        window.onload = function() {
+            verificarSessao();
+        }
+
+        function verificarSessao() {
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    try {
+                        let sessao = JSON.parse(this.responseText);
+
+                        if (sessao.status === 'logado') {
+                            document.getElementById('login-area').style.display = 'none';
+                            document.getElementById('user-area').style.display = 'inline-block';
+                            document.getElementById('msg-ola').innerText = "Olá, " + sessao.nome;
+
+                            if (sessao.tipo === 'FUNCIONARIO') {
+                                document.getElementById('link-admin').style.display = 'inline-block';
+                                document.getElementById('link-admin').href = "admin/painel.html";
+                            }
+                        }
+                    } catch (e) {
+                        console.log("Usuário não logado ou erro na sessão.");
+                    }
+                }
+            };
+            xhttp.open("GET", "verificar-sessao.php", true);
+            xhttp.send();
+        }
+
+        function irParaBusca() {
+            let origem = document.getElementById('busca-origem').value;
+            let destino = document.getElementById('busca-destino').value;
+            let data = document.getElementById('busca-data').value;
+            window.location.href = `viagens-pesquisa.html?origem=${origem}&destino=${destino}&data=${data}`;
+        }
+    </script>
+
+</body>
+</html>

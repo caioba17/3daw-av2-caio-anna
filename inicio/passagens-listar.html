@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Passagens</title>
+    <link rel="stylesheet" href="../css/passagens.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">Viação Calango</div>
+            <nav>
+                <a href="inicio.html">Voltar ao Início</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container-tickets">
+        <h2>Minhas Viagens</h2>
+        <div id="lista-tickets">Carregando...</div>
+    </div>
+
+    <script>
+    window.onload = function() {
+        carregarPassagens();
+    };
+
+    function carregarPassagens() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    let lista = JSON.parse(this.responseText);
+                    let html = "";
+
+                    if (lista.length === 0) {
+                        html = "<p>Você ainda não comprou nenhuma passagem.</p>";
+                    } else {
+                        lista.forEach(t => {
+                            // Formata data
+                            let data = t.data_ida.split('-').reverse().join('/');
+                            
+                            html += `
+                                <div class="ticket-item">
+                                    <div>
+                                        <h3>${t.origem} ➝ ${t.destino}</h3>
+                                        <p>Data: ${data} | ${t.hora_saida}</p>
+                                        <p>Assento: <strong>${t.assento}</strong> | ${t.tipo_onibus}</p>
+                                        <p>Status: <strong>${t.status}</strong></p>
+                                    </div>
+                                    <div>
+                                        <button class="btn-cancelar" onclick="cancelar(${t.id_passagem})">Cancelar Viagem</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    document.getElementById('lista-tickets').innerHTML = html;
+                } catch(e) {
+                    document.getElementById('lista-tickets').innerHTML = "<p>Faça login para ver suas passagens.</p>";
+                }
+            }
+        };
+        xhttp.open("GET", "passagens-listar.php", true);
+        xhttp.send();
+    }
+
+    function cancelar(idPassagem) {
+        if(confirm("Tem certeza que deseja cancelar esta passagem?")) {
+            let xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "passagens-excluir.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("id=" + idPassagem);
+            xhttp.onload = function() {
+                alert(this.responseText);
+                carregarPassagens(); 
+            }
+        }
+    }
+    </script>
+</body>
+</html>

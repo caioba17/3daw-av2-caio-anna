@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultados da Busca</title>
+    <link rel="stylesheet" href="../css/viagens.css">
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <div class="logo">Viação Calango</div>
+            <nav><a href="inicio.html">Nova Busca</a></nav>
+        </div>
+    </header>
+
+    <div class="container-lista">
+        <h2>Viagens Encontradas</h2>
+        <div id="lista-viagens">
+            <p style="text-align:center; font-weight:bold;">Carregando...</p>
+        </div>
+    </div>
+
+<script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        const origem = params.get('origem');
+        const destino = params.get('destino');
+        const data = params.get('data');
+
+        buscarViagens(origem, destino, data);
+    };
+
+    function buscarViagens(origem, destino, data) {
+        let container = document.getElementById('lista-viagens');
+        let xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    let viagens = JSON.parse(this.responseText);
+                    let html = "";
+
+                    if (viagens.length === 0) {
+                        html = "<p style='text-align:center'>Nenhuma viagem encontrada.</p>";
+                    } else {
+                        viagens.forEach(v => {
+                            let dataF = v.data_ida.split('-').reverse().join('/');
+                            
+                            html += `
+                                <div class="card-viagem">
+                                    <div class="info">
+                                        <h3>${v.origem} ➝ ${v.destino}</h3>
+                                        <p>${dataF} | ${v.hora_saida}</p>
+                                        <p>${v.tipo_onibus}</p>
+                                    </div>
+                                    <div>
+                                        <span class="preco">R$ ${v.preco}</span>
+                                        <button class="btn-comprar" onclick="comprar(${v.id})">COMPRAR</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    container.innerHTML = html;
+                } catch (e) {
+                    container.innerHTML = "<p style='color:red'>Erro ao ler dados.</p>";
+                }
+            } else if (this.readyState == 4) {
+                container.innerHTML = "<p>Erro de conexão com a API de busca.</p>";
+            }
+        };
+        
+        let url = `viagens-buscar.php?origem=${origem || ''}&destino=${destino || ''}&data=${data || ''}`;
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+
+    function comprar(idViagem) {
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                try {
+                    let sessao = JSON.parse(this.responseText);
+                    
+                    if (sessao.status === 'logado') {
+                        finalizarCompra(idViagem, sessao.id);
+                    } else {
+                        alert("Você precisa fazer LOGIN para comprar!");
+                        window.location.href = "../login_cadastro/login.html";
+                    }
+                } catch(e) {
+                    console.log("Erro ao verificar sessão");
+                }
+            }
+        };
+        xhttp.open("GET", "../login_cadastro/verificar-sessao.php", true);
+        xhttp.send();
+    }
+
+    function finalizarCompra(idViagem, idUsuario) {
+        if(!confirm("Confirmar a compra desta passagem?")) return;
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                alert(this.responseText);
+                
+                if(this.responseText.includes("sucesso")) {
+                    window.location.href = "inicio.html";
+                }
+            }
+        };
+        
+        xhttp.open("POST", "passagens-comprar.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(`id_viagem=${idViagem}&id_usuario=${idUsuario}`);
+    }
+</script>
+</body>
+</html>
