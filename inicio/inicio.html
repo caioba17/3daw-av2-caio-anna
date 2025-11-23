@@ -22,7 +22,7 @@
                     <span id="user-area" style="display: none;">
                         <span id="msg-ola" class="ola-text"></span>
                         <a href="#" id="link-admin" style="display: none;">Painel</a>
-                        <a href="logout.php" class="btn-sair">Sair</a>
+                        <a href="../login_cadastro/logout.php" class="btn-sair">Sair</a>
                     </span>
                 </span>
                 
@@ -163,7 +163,7 @@
 
                             if (sessao.tipo === 'FUNCIONARIO') {
                                 document.getElementById('link-admin').style.display = 'inline-block';
-                                document.getElementById('link-admin').href = "admin/painel.html";
+                                document.getElementById('link-admin').href = "../adm/painel.html";
                             }
                         }
                     } catch (e) {
@@ -171,7 +171,7 @@
                     }
                 }
             };
-            xhttp.open("GET", "verificar-sessao.php", true);
+            xhttp.open("GET", "../login_cadastro/verificar-sessao.php", true);
             xhttp.send();
         }
 
