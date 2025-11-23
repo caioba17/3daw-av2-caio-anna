@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Viagem - Calango</title>
+    <link rel="stylesheet" href="../../css/painel-adm.css">
+    <link rel="stylesheet" href="../../css/viagens-criar.css">
+</head>
+<body>
+
+    <div class="painel-container" style="max-width: 700px;">
+        
+        <div class="painel-header">
+            <h2>Agendar Nova Viagem</h2>
+            <a href="viagens-listar.html" class="btn-link">Cancelar</a>
+        </div>
+
+        <form>
+            
+            <div class="row">
+                <div class="col">
+                    <label>Cidade de Origem</label>
+                    <input type="text" id="origem" placeholder="Ex: Rio de Janeiro" required>
+                </div>
+                <div class="col">
+                    <label>Cidade de Destino</label>
+                    <input type="text" id="destino" placeholder="Ex: São Paulo" required>
+                </div>
+            </div>
+
+            <div class="row">   
+                <div class="col">
+                    <label>Data da Viagem</label>
+                    <input type="date" id="data" required>
+                </div>
+                <div class="col">
+                    <label>Horário de Saída</label>
+                    <input type="time" id="hora" required>
+                </div>
+            </div>
+
+            <label>Preço da Passagem (R$)</label>
+            <input type="number" id="preco" step="0.01" placeholder="0.00" required>
+
+            <div class="row">
+                <div class="col">
+                    <label>ID do Ônibus</label>
+                    <input type="number" id="id_onibus" placeholder="Consulte na frota" required>
+                </div>
+                <div class="col">
+                    <label>ID do Motorista</label>
+                    <input type="number" id="id_motorista" placeholder="Consulte na equipe" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-salvar" onclick="event.preventDefault(); salvarViagem()">Confirmar Viagem</button>
+        </form>
+        
+        <p id="msg"></p>
+    </div>
+
+    <script>
+    function salvarViagem() {
+        let msg = document.getElementById("msg");
+        msg.innerHTML = "Processando...";
+        msg.style.color = "#333";
+
+        let origem = document.getElementById("origem").value;
+        let destino = document.getElementById("destino").value;
+        let data = document.getElementById("data").value;
+        let hora = document.getElementById("hora").value;
+        let preco = document.getElementById("preco").value;
+        let id_onibus = document.getElementById("id_onibus").value;
+        let id_motorista = document.getElementById("id_motorista").value;
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                if(this.responseText.includes("sucesso")) {
+                    msg.innerHTML = "Viagem criada com sucesso!";
+                    msg.style.color = "green";
+                    setTimeout(() => { window.location.href = "viagens-listar.html"; }, 1000);
+                } else {
+                    msg.innerHTML = "Erro: " + this.responseText;
+                    msg.style.color = "red";
+                }
+            }
+        };
+        
+        xhttp.open("POST", "viagens-criar.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(`origem=${origem}&destino=${destino}&data=${data}&hora=${hora}&preco=${preco}&id_onibus=${id_onibus}&id_motorista=${id_motorista}`);
+    }
+    </script>
+</body>
+</html>
