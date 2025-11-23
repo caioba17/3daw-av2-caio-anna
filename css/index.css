@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: 15px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #00607A;
+}
+
+nav a {
+    text-decoration: none;
+    color: #00607A;
+    margin-left: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.btn-sair {
+    color: #e74c3c !important;
+}
+
+.ola-text {
+    font-weight: bold;
+    color: #333;
+    margin-left: 15px;
+}
+
+.hero {
+    background-color: #00607A;
+    color: white;
+    padding: 60px 0 100px 0;
+    position: relative;
+}
+
+.hero-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.hero h1 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.hero p {
+    text-align: right;
+    font-weight: 300;
+    font-size: 1.1rem;
+}
+
+.busca-box {
+    background-color: white;
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 15px;
+    color: #333;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.busca-box .campo {
+    flex: 1;
+    min-width: 150px;
+}
+
+.busca-box label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #00607A;
+    margin-bottom: 8px;
+}
+
+.busca-box input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+}
+
+.busca-box input:focus {
+    border-color: #00607A;
+}
+
+.btn-pesquisar {
+    background-color: #00607A;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    height: 45px;
+    transition: background-color 0.2s;
+}
+
+.destinos {
+    margin-top: 60px; 
+    margin-bottom: 50px;
+}
+
+.destinos h2 {
+    color: #00607A;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.grid-destinos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+
+.card-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-info {
+    padding: 20px;
+}
+
+.card-info h3 {
+    color: #00607A;
+    margin-bottom: 5px;
+    font-size: 1.2rem;
+}
+
+.card-info p {
+    color: #666;
+}
+.ofertas {
+    margin-bottom: 60px;
+}
+
+.grid-ofertas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card-oferta {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.card-oferta h3 {
+    padding: 20px 20px 10px 20px;
+    color: #00607A;
+    font-size: 1.2rem;
+    line-height: 1.2;
+}
+
+.oferta-img {
+    width: 100%;
+    height: 150px;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 10px;
+}
+
+.oferta-conteudo {
+    padding: 0 20px 20px 20px;
+}
+.oferta-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #00607A;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.oferta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+.oferta-row .preco {
+    color: #00607A;
+    font-weight: 700;
+}
+
+.link-ver-todos {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.85rem;
+    color: #777;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+}
+
+
+.vantagens {
+    margin-bottom: 80px;
+}
+
+.vantagens h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.grid-vantagens {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card-vantagem {
+    background-color: #00607A;
+    color: white;
+    padding: 35px;
+    border-radius: 15px;
+    transition: transform 0.3s;
+}
+.card-vantagem h3 {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: #eee;
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: auto;
+}

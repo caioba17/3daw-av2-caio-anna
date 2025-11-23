@@ -1,0 +1,10 @@
+        .container-tickets { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .ticket-item {
+            background: white; border: 1px solid #ddd; padding: 20px;
+            margin-bottom: 15px; border-radius: 10px; border-left: 5px solid #27ae60;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-cancelar {
+            background-color: #e74c3c; color: white; border: none;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
+        }

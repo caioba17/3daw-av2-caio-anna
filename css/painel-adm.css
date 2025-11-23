@@ -93,10 +93,6 @@ body {
     min-height: 120px;
 }
 
-.menu-card:hover {
-    transform: translateY(-5px);
-    background-color: #f0f8ff; 
-}
 
 .menu-card span {
     font-size: 2rem;

@@ -48,9 +48,6 @@ body, html {
  margin-top: 10px;
 }
 
-.botao-submit:hover {
- background-color: #004F63;
-}
 
 .link-login {
  display: block;

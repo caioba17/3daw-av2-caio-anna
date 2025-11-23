@@ -1,0 +1,27 @@
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .card-relatorio {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .card-relatorio h3 { margin-top: 0; color: #00607A; border-bottom: 2px solid #eee; padding-bottom: 15px; }
+        
+        .item-alerta {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px; border-bottom: 1px solid #f0f0f0; color: #555;
+        }
+        .item-alerta:last-child { border-bottom: none; }
+        
+        .tag-vermelha { color: #e74c3c; font-weight: bold; background: #fdedec; padding: 5px 10px; border-radius: 5px; }
+        .tag-azul { color: #3498db; font-weight: bold; background: #eef7fc; padding: 5px 10px; border-radius: 5px; }
+        
+        .resumo-numero { font-size: 3rem; font-weight: 700; color: #00607A; text-align: center; margin: 20px 0; }
+        .resumo-label { text-align: center; color: #777; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }

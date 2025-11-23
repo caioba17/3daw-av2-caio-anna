@@ -1,0 +1,24 @@
+
+        .filtros-busca {
+            display: flex; gap: 15px; margin-bottom: 20px;
+            background: #f8f9fa; padding: 20px; border-radius: 15px;
+        }
+        .filtros-busca input { 
+            padding: 12px; border: 1px solid #ccc; border-radius: 8px; flex: 1;
+        }
+        .btn-buscar {
+            padding: 12px 25px; background-color: #00607A; color: white;
+            border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+        
+        .lista-viagens { display: grid; gap: 15px; }
+        .item-viagem {
+            background: white; border: 1px solid #eee; padding: 20px;
+            border-radius: 10px; display: flex; justify-content: space-between;
+            align-items: center; border-left: 5px solid #f1c40f; /* Amarelo = Venda */
+        }
+        .btn-vender {
+            background-color: #27ae60; color: white; border: none;
+            padding: 12px 25px; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+        .btn-vender:hover { background-color: #219150; }
