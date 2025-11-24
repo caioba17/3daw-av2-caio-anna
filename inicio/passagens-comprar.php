@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_usuario = $_SESSION['id'];
     $id_viagem = $_POST['id_viagem'];
 
-    $assento = rand(1, 42); 
+    $assento = rand(1, 32); 
 
     $sql = "INSERT INTO passagens (id_usuario, id_viagem, assento, status) 
             VALUES ('$id_usuario', '$id_viagem', '$assento', 'CONFIRMADA')";

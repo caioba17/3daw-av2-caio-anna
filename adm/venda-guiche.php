@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_funcionario = $_SESSION['id'];
     $id_viagem = $_POST['id_viagem'];
     
-    $assento = rand(1, 40);
+    $assento = rand(1, 32);
 
     $check = $conn->query("SELECT id FROM passagens WHERE id_viagem = $id_viagem AND assento = $assento");
     if ($check->num_rows > 0) { $assento++; }
